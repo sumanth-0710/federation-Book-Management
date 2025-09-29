@@ -1,0 +1,75 @@
+
+# schema.graphqls
+
+# -------------------------
+# Book Subgraph
+# -------------------------
+type Book @key(fields: "id") {
+id: ID!
+title: String!
+publishedYear: Int!
+author: Author!   # federated reference
+}
+
+# Author entity (can live in another subgraph too)
+type Author @key(fields: "id") {
+id: ID!
+name: String!
+phoneNumber: String
+address: String
+books: [Book]
+}
+
+# -------------------------
+# Queries (Read Operations)
+# -------------------------
+type Query {
+# Book queries
+getBookById(id: ID!): Book
+getAllBooks: [Book!]!
+
+# Author queries
+getAuthorById(id: ID!): Author
+getAllAuthors: [Author!]!
+}
+
+input BookInput {
+    title: String!
+    publishedYear: Int!
+    authorId: ID!
+}
+
+input BookUpdateInput {
+    id: ID!
+    title: String
+    publishedYear: Int
+    authorId: ID
+}
+
+input AuthorInput {
+    name: String!
+    phoneNumber: String
+    address: String
+}
+
+input AuthorUpdateInput {
+    id: ID!
+    name: String
+    phoneNumber: String
+    address: String
+}
+
+# -------------------------
+# Mutations (Create/Update/Delete)
+# -------------------------
+type Mutation {
+# Book mutations
+    addBook(input: BookInput!): Book
+    updateBook(input: BookUpdateInput!): Book
+    deleteBook(id: ID!): Boolean
+
+# Author mutations
+    addAuthor(input: AuthorInput!): Author
+    updateAuthor(input: AuthorUpdateInput!): Author
+    deleteAuthor(id: ID!): Boolean
+}
