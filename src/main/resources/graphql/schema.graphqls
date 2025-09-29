@@ -8,7 +8,7 @@ type Book @key(fields: "id") {
 id: ID!
 title: String!
 publishedYear: Int!
-author: Author!   # federated reference
+author: Author  # federated reference
 }
 
 # Author entity (can live in another subgraph too)
