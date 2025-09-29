@@ -6,16 +6,18 @@ import com.graphql.fedration.fedration_book.model.Author;
 import com.graphql.fedration.fedration_book.model.Book;
 
 public class BookMapper {
+
     public static BookDto toDto(Book book) {
         BookDto dto = new BookDto();
         dto.setId(book.getId());
         dto.setTitle(book.getTitle());
         dto.setPublishedYear(book.getPublishedYear());
         if (book.getAuthor() != null) {
-            dto.setAuthor(AuthorMapper.toDto(book.getAuthor(), false));
+            dto.setAuthorId(book.getAuthor().getId());
         }
         return dto;
     }
+
     public static Book toEntity(BookInputDto dto, Author author) {
         Book book = new Book();
         book.setTitle(dto.getTitle());

@@ -17,21 +17,16 @@ public class AuthorDataLoader {
         this.authorRepo = authorRepo;
     }
 
-    // Batch loader that returns CompletableFuture<List<Author>>
     public CompletableFuture<List<Author>> loadAuthors(List<Long> ids) {
         return CompletableFuture.supplyAsync(() -> {
-            // Fetch all authors in one query
             List<Author> authors = authorRepo.findAllById(ids);
-
-            // Map authors by ID for easy lookup
-            Map<Long, Author> authorMap = authors.stream()
+            Map<Long, Author> map = authors.stream()
                     .collect(Collectors.toMap(Author::getId, a -> a));
-
-            // Return authors in the same order as requested IDs
             return ids.stream()
-                    .map(authorMap::get)
+                    .map(id -> map.getOrDefault(id, null)) // safely return null if missing
                     .collect(Collectors.toList());
         });
     }
+
 
 }
